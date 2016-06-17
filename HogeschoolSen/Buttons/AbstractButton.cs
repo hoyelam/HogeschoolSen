@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HogeschoolSen.Buttons
 {
-    public class AbstractButton
+    public class AbstractButton : IButton
     {
         private string _name;
         private string _color;

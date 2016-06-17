@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Xna.Framework;
 using MonoGame;
 using HogeschoolSen.Buttons;
+using HogeschoolSen.TextLabels;
 
 namespace HogeschoolSen
 {
@@ -42,6 +43,7 @@ namespace HogeschoolSen
         [STAThread]
         static void Main()
         {
+            // Factory
             var buttonFactory = new ButtonFactory();
             var yellowButton = buttonFactory.makeNewButton("yellow", "Yellow button pressed");
             var redButton = buttonFactory.makeNewButton("red", "Red button pressed");
@@ -51,10 +53,18 @@ namespace HogeschoolSen
             redButton.DoAction();
             blueButton.DoAction();
 
-            var yellowButtonSize = new SizeAdjustableDecorator(yellowButton);
-            Console.WriteLine(yellowButtonSize.GetHeight());
-            yellowButtonSize.AdjustHeight(40);
-            Console.WriteLine(yellowButtonSize.GetHeight());
+            // Decorator
+            var adjustableYellowButton = new SizeAdjustableDecorator(yellowButton);
+            Console.WriteLine(adjustableYellowButton.GetHeight());
+            adjustableYellowButton.AdjustHeight(40);
+            Console.WriteLine(adjustableYellowButton.GetHeight());
+
+            // Adapter
+            IButton textLabelAdaptere = new TextLabelAdapter(new TextLabel());
+            textLabelAdaptere.SetAction("This is the Adaptee");
+            textLabelAdaptere.DoAction();
+
+
             using (var game = new Game())
             {
                 game.Run();
