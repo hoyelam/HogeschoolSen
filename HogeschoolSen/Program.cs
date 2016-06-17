@@ -51,6 +51,10 @@ namespace HogeschoolSen
             redButton.DoAction();
             blueButton.DoAction();
 
+            var yellowButtonSize = new SizeAdjustableDecorator(yellowButton);
+            Console.WriteLine(yellowButtonSize.GetHeight());
+            yellowButtonSize.AdjustHeight(40);
+            Console.WriteLine(yellowButtonSize.GetHeight());
             using (var game = new Game())
             {
                 game.Run();
