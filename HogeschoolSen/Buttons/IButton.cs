@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HogeschoolSen.Buttons
 {
-    interface IButton
+    public interface IButton
     {
         string getName();
         void SetName(string name);

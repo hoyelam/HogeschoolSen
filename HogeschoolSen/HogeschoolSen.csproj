@@ -57,6 +57,10 @@
     <Compile Include="Buttons\IButton.cs" />
     <Compile Include="Buttons\RedButton.cs" />
     <Compile Include="Buttons\SizeAdjustableDecorator.cs" />
+    <Compile Include="Collections\ICollection.cs" />
+    <Compile Include="Collections\Iterator.cs" />
+    <Compile Include="Collections\UIElements.cs" />
+    <Compile Include="Collections\UIElementsIterator.cs" />
     <Compile Include="TextLabels\TextLabel.cs" />
     <Compile Include="TextLabels\TextLabelAdapter.cs" />
     <Compile Include="Buttons\YellowButton.cs" />
@@ -91,6 +95,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

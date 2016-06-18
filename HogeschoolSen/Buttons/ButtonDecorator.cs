@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HogeschoolSen.Buttons
 {
-    public abstract class ButtonDecorator : AbstractButton
+    public abstract class ButtonDecorator : IButton
     {
         protected AbstractButton _button;
 
@@ -15,6 +15,34 @@ namespace HogeschoolSen.Buttons
             _button = button;
         }
 
+        public void DoAction()
+        {
+            _button.DoAction();
+        }
 
+        public string GetColor()
+        {
+            return _button.GetColor();
+        }
+
+        public string getName()
+        {
+            return _button.getName();
+        }
+
+        public void SetAction(string action)
+        {
+            _button.SetAction(action);
+        }
+
+        public void SetColor(string color)
+        {
+            _button.SetColor(color);
+        }
+
+        public void SetName(string name)
+        {
+            _button.SetName(name);
+        }
     }
 }

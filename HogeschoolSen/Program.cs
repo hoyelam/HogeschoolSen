@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using MonoGame;
 using HogeschoolSen.Buttons;
 using HogeschoolSen.TextLabels;
+using HogeschoolSen.Collections;
 
 namespace HogeschoolSen
 {
@@ -56,6 +57,7 @@ namespace HogeschoolSen
             // Decorator
             var adjustableYellowButton = new SizeAdjustableDecorator(yellowButton);
             Console.WriteLine(adjustableYellowButton.GetHeight());
+            Console.WriteLine(adjustableYellowButton.GetColor());
             adjustableYellowButton.AdjustHeight(40);
             Console.WriteLine(adjustableYellowButton.GetHeight());
 
@@ -64,6 +66,19 @@ namespace HogeschoolSen
             textLabelAdaptere.SetAction("This is the Adaptee");
             textLabelAdaptere.DoAction();
 
+            // Iterator
+            UIElements allElements = new UIElements();
+            allElements.AddElement(adjustableYellowButton);
+            allElements.AddElement(textLabelAdaptere);
+
+            Iterator iterator = allElements.CreateIterator();
+            Console.WriteLine("Iterating over collection:");
+            IButton item = (IButton) iterator.First();
+            while (item != null)
+            {
+                item.DoAction();
+                item = (IButton) iterator.Next();
+            }
 
             using (var game = new Game())
             {
