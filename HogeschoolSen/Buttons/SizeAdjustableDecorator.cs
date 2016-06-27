@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HogeschoolSen.Visitor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,14 +26,19 @@ namespace HogeschoolSen.Buttons
             _width += widthIncreaseBy;
         }
 
-        public string GetHeight()
+        public int GetHeight()
         {
-            return _height.ToString();
+            return _height;
         }
 
-        public string GetWidth()
+        public int GetWidth()
         {
-            return _width.ToString();
+            return _width;
+        }
+
+        public SizeAdjustableDecorator Accept(ISizeVisitor visitor)
+        {
+            return visitor.Visit(this);
         }
     }
 }

@@ -8,12 +8,16 @@ using MonoGame;
 using HogeschoolSen.Buttons;
 using HogeschoolSen.TextLabels;
 using HogeschoolSen.Collections;
+using HogeschoolSen.Visitor;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace HogeschoolSen
 {
     class Game : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        Texture2D t;
 
         public Game()
         {
@@ -24,42 +28,60 @@ namespace HogeschoolSen
         protected override void LoadContent()
         {
             base.LoadContent();
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            t = new Texture2D(GraphicsDevice, 1, 1);
+            t.SetData<Color>(
+                new Color[] { Color.Black });
+
         }
 
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            GraphicsDevice.Clear(Color.AliceBlue);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-        }
-    }
-    class Program
-    {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
+
+            spriteBatch.Begin();
+
             // Factory
             var buttonFactory = new ButtonFactory();
-            var yellowButton = buttonFactory.makeNewButton("yellow", "Yellow button pressed");
-            var redButton = buttonFactory.makeNewButton("red", "Red button pressed");
-            var blueButton = buttonFactory.makeNewButton("blue", "Blue button pressed");
+            var colorFactory = new ColorFactory();
+            var defaultButtons = new UIElements();
+            defaultButtons.AddElement(buttonFactory.makeNewButton("yellow", "Yellow button pressed"));
+            defaultButtons.AddElement(buttonFactory.makeNewButton("red", "Red button pressed"));
+            defaultButtons.AddElement(buttonFactory.makeNewButton("blue", "Blue button pressed"));
 
-            yellowButton.DoAction();
-            redButton.DoAction();
-            blueButton.DoAction();
+            var defaultButtonsIterator = defaultButtons.CreateIterator();
+            var yellowButton = (AbstractButton) defaultButtonsIterator.First();
+
+            var defaultButton = (IButton) defaultButtonsIterator.First();
+            var xPos = 0;
+            while (defaultButton != null)
+            {
+                Texture2D defaultButtonRect = new Texture2D(graphics.GraphicsDevice, 25, 25);
+                Color[] defaultButtonColor = new Color[25 * 25];
+                for (int i = 0; i < defaultButtonColor.Length; ++i) defaultButtonColor[i] = colorFactory.MakeColor(defaultButton.GetColor());
+                defaultButtonRect.SetData(defaultButtonColor);
+                spriteBatch.Draw(defaultButtonRect, new Vector2(xPos, 0), colorFactory.MakeColor(defaultButton.GetColor()));
+                
+                defaultButton.DoAction();
+                xPos += 25;
+                defaultButton = (IButton) defaultButtonsIterator.Next();
+            }
 
             // Decorator
             var adjustableYellowButton = new SizeAdjustableDecorator(yellowButton);
-            Console.WriteLine(adjustableYellowButton.GetHeight());
-            Console.WriteLine(adjustableYellowButton.GetColor());
             adjustableYellowButton.AdjustHeight(40);
-            Console.WriteLine(adjustableYellowButton.GetHeight());
+
+            Texture2D rect = new Texture2D(graphics.GraphicsDevice, adjustableYellowButton.GetWidth(), adjustableYellowButton.GetHeight());
+            Color[] data = new Color[adjustableYellowButton.GetWidth() * adjustableYellowButton.GetHeight()];
+            for (int i = 0; i < data.Length; ++i) data[i] = colorFactory.MakeColor(adjustableYellowButton.GetColor());
+            rect.SetData(data);
+            spriteBatch.Draw(rect, new Vector2(0, 50), colorFactory.MakeColor(adjustableYellowButton.GetColor()));
 
             // Adapter
             IButton textLabelAdaptere = new TextLabelAdapter(new TextLabel());
@@ -73,13 +95,29 @@ namespace HogeschoolSen
 
             Iterator iterator = allElements.CreateIterator();
             Console.WriteLine("Iterating over collection:");
-            IButton item = (IButton) iterator.First();
+            var item = (IButton)iterator.First();
             while (item != null)
             {
                 item.DoAction();
-                item = (IButton) iterator.Next();
+                item = (IButton)iterator.Next();
             }
 
+            // Visitor
+            var visitor = new ButtonVisitor();
+            adjustableYellowButton.Accept(visitor);
+
+            spriteBatch.End();
+        }
+    }
+    class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+    
             using (var game = new Game())
             {
                 game.Run();

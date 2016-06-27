@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace HogeschoolSen.Buttons
         private string _name;
         private string _color;
         private string _action;
+        private Vector2 _position;
 
         public string getName()
         {
@@ -40,6 +42,16 @@ namespace HogeschoolSen.Buttons
         public void DoAction()
         {
             Console.WriteLine("Button " + _name + " does action " + _action);
+        }
+
+        public Vector2 GetVector()
+        {
+            return _position;
+        }
+
+        public void SetVector(Vector2 vector)
+        {
+            _position = vector;
         }
     }
 }
